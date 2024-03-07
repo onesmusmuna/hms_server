@@ -46,9 +46,15 @@ export async function postPatientLogin(req: Request, res: Response) {
     // await db.sessions.create({ data: { userid: user.id, device } });
 
     return res
-      .cookie("connect", patientAuthToken, { httpOnly: true, secure: true })
+      .cookie("pt", patientAuthToken, { httpOnly: true, secure: true })
       .json(cr.str("ok", `Welcome ${patient.email}`));
   } catch (error) {
     return res.json(cr.str("fail", "Failed to Login user"));
   }
+}
+
+export async function getPatient(req: Request, res: Response) {
+  try {
+    res.send("Patient");
+  } catch (error) {}
 }
