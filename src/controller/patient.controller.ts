@@ -64,16 +64,55 @@ export async function getPatient(req: Request, res: Response) {
     const { password, updatedAt, createdAt, code, ...load } = patient;
 
     return res.json(cr.load("ok", load));
-  } catch (error) {}
+  } catch (error) {
+    return res.json(cr.str("fail", "Failed to fetch user"));
+  }
 }
 
 export async function postPatientLogout(req: Request, res: Response) {
-  // @ts-ignore
-  //   req.pid = 0;
-  //   req.cookies["pt"] = "";
-
   return res.clearCookie("pt").json(cr.str("ok", "logged out"));
-  //   res.cookie("pt", "");
+}
 
-  //   console.log(req.cookies);
+export async function updatePatient(req: Request, res: Response) {
+  // @ts-ignore
+  const id = req.pid;
+
+  const { dob, email, fName, gender, inpatient, lName, nextOfKin, phone } = req.body as IDetails;
+
+  interface IDetails {
+    email: string;
+    fName: string;
+    lName: string;
+    phone: string;
+    dob: string;
+    gender: string;
+    nextOfKin: string;
+    inpatient: boolean;
+  }
+
+  try {
+    const patient = await db.patient.update({
+      where: { id },
+      data: { dob, email, fName, gender, inpatient, lName, nextOfKin, phone },
+      select: { email: true },
+    });
+
+    return res.json(cr.str("ok", `Patient ${email} updated successfully`));
+    patient;
+  } catch (error) {
+    return res.json(cr.str("fail", "Failed to Update user"));
+  }
+}
+
+export async function deletePatient(req: Request, res: Response) {
+  // @ts-ignore
+  const id = req.pid;
+
+  try {
+    const patient = await db.patient.delete({ where: { id }, select: { email: true } });
+
+    return res.json(cr.str("ok", `User ${patient.email} Delete successfully `));
+  } catch (error) {
+    return res.json(cr.str("fail", "Failed to delete user"));
+  }
 }
