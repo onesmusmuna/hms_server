@@ -54,7 +54,26 @@ export async function postPatientLogin(req: Request, res: Response) {
 }
 
 export async function getPatient(req: Request, res: Response) {
+  // @ts-ignore
+  const id = req.pid;
   try {
-    res.send("Patient");
+    const patient = await db.patient.findFirst({ where: { id } });
+
+    if (!patient) return res.json(cr.str("bad", "patient not found"));
+
+    const { password, updatedAt, createdAt, code, ...load } = patient;
+
+    return res.json(cr.load("ok", load));
   } catch (error) {}
+}
+
+export async function postPatientLogout(req: Request, res: Response) {
+  // @ts-ignore
+  //   req.pid = 0;
+  //   req.cookies["pt"] = "";
+
+  return res.clearCookie("pt").json(cr.str("ok", "logged out"));
+  //   res.cookie("pt", "");
+
+  //   console.log(req.cookies);
 }
