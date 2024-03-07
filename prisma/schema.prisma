@@ -29,3 +29,15 @@ model Patient {
   createdAt DateTime @default(now())
   id        Int      @id @default(autoincrement())
 }
+
+model Doctor {
+  email      String  @unique
+  password   String
+  type       String
+  fName      String?
+  lName      String?
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+}
