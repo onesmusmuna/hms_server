@@ -10,6 +10,7 @@ import {
 import { patientMiddleware } from "./middleware/patient.middleware";
 import {
   deleteDoctor,
+  // fetchDoctors,
   getDoctor,
   postDoctorLogin,
   postDoctorLogout,
@@ -17,6 +18,7 @@ import {
   updateDoctor,
 } from "./controller/doctor.controller";
 import { doctorMiddleware } from "./middleware/doctor.middleware";
+import { postAppointment } from "./controller/appointment.controller";
 
 const router = Router();
 
@@ -39,5 +41,9 @@ router.route("/doctor/logout").post(doctorMiddleware, postDoctorLogout);
 router.route("/doctor").get(doctorMiddleware, getDoctor);
 router.route("/doctor/update").patch(doctorMiddleware, updateDoctor);
 router.route("/doctor/delete").delete(doctorMiddleware, deleteDoctor);
+
+// router.route("/doctors").get(fetchDoctors);
+
+router.route("/appointment").post(patientMiddleware, postAppointment);
 
 export default router;

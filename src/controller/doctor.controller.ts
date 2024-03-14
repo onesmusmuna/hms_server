@@ -61,7 +61,11 @@ export async function getDoctor(req: Request, res: Response) {
 
     if (!doctor) return res.json(cr.str("bad", "doctor not found"));
 
-    const { password, updatedAt, createdAt, ...load } = doctor;
+    const { password, updatedAt, createdAt, ...doc } = doctor;
+
+    const appts = await db.appointment.findMany({ where: { prob: doctor.type.toLowerCase() } });
+
+    const load = { appts: appts, ...doc };
 
     return res.json(cr.load("ok", load));
   } catch (error) {
@@ -104,3 +108,13 @@ export async function deleteDoctor(req: Request, res: Response) {
     return res.json(cr.str("fail", "Failed to delete doctor"));
   }
 }
+
+// export async function fetchDoctors(req: Request, res: Response) {
+//   try {
+//     const doctors = await db.doctor.findMany({ select: { type: true, email: true, id: true } });
+
+//     return res.json(cr.load("ok", { doctors }));
+//   } catch (error) {
+//     return res.json(cr.str("fail", "Failed to fetch doctor"));
+//   }
+// }

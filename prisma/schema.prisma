@@ -41,3 +41,10 @@ model Doctor {
   createdAt DateTime @default(now())
   id        Int      @id @default(autoincrement())
 }
+
+model Appointment {
+  prob      String
+  date      String
+  userId    Int
+  id        Int      @id @default(autoincrement())
+}
